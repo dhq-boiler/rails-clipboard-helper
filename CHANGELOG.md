@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2025-11-09
+
+### Fixed
+- Fixed HTML entity escaping issue in onclick JavaScript
+- Simplified inline JavaScript by removing IIFE wrapper and using `this` directly
+
+### Changed
+- Changed implementation to use hidden DOM element for copied content instead of string escaping
+- Improved code readability and maintainability
+
 ## [0.1.2] - 2025-11-09
 
 ### Changed
@@ -39,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented `clipboard_javascript_tag` helper method (for backward compatibility)
 - Clipboard copy functionality with automatic JavaScript loading
 - Rails Engine for automatic asset integration
+[0.1.3]: https://github.com/dhq_boiler/rails-clipboard-helper/releases/tag/v0.1.3
 - Support for Sprockets, Importmap, esbuild, and webpack
 - Turbo/Hotwire and Turbolinks support
 - Customizable button text and CSS classes
