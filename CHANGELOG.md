@@ -55,7 +55,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implemented `clipboard_javascript_tag` helper method (for backward compatibility)
 - Clipboard copy functionality with automatic JavaScript loading
 - Rails Engine for automatic asset integration
-[0.1.3]: https://github.com/dhq_boiler/rails-clipboard-helper/releases/tag/v0.1.3
 - Support for Sprockets, Importmap, esbuild, and webpack
 - Turbo/Hotwire and Turbolinks support
 - Customizable button text and CSS classes
@@ -66,6 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive RSpec tests
 - Documentation
 
+[0.1.4]: https://github.com/dhq_boiler/rails-clipboard-helper/releases/tag/v0.1.4
+[0.1.3]: https://github.com/dhq_boiler/rails-clipboard-helper/releases/tag/v0.1.3
 [0.1.2]: https://github.com/dhq_boiler/rails-clipboard-helper/releases/tag/v0.1.2
 [0.1.1]: https://github.com/dhq_boiler/rails-clipboard-helper/releases/tag/v0.1.1
 [0.1.0]: https://github.com/dhq_boiler/rails-clipboard-helper/releases/tag/v0.1.0
