@@ -70,22 +70,21 @@ module Rails
 
           # Inline JavaScript for clipboard functionality
           onclick_js = <<~JS.strip.gsub("\n", ' ')
-            (function(btn) {
-              const target = document.getElementById('#{unique_id}');
-              const text = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' ? target.value : target.textContent;
-              navigator.clipboard.writeText(text).then(() => {
-                const original = btn.innerHTML;
-                btn.innerHTML = '#{copied_content.gsub("'", "\\\\'")}';
-                btn.style.color = '#28a745';
-                setTimeout(() => {
-                  btn.innerHTML = original;
-                  btn.style.color = '#0066cc';
-                }, 2000);
-              }).catch(err => {
-                console.error('Failed to copy:', err);
-                alert('Failed to copy to clipboard');
-              });
-            })(this);
+            const target = document.getElementById('#{unique_id}');
+            const copiedElement = document.getElementById('#{unique_id}-copied');
+            const text = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' ? target.value : target.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+              const original = this.innerHTML;
+              this.innerHTML = copiedElement.innerHTML;
+              this.style.color = '#28a745';
+              setTimeout(() => {
+                this.innerHTML = original;
+                this.style.color = '#0066cc';
+              }, 2000);
+            }).catch(err => {
+              console.error('Failed to copy:', err);
+              alert('Failed to copy to clipboard');
+            });
           JS
 
           html = <<~HTML
@@ -101,6 +100,7 @@ module Rails
               >
                 #{button_content}
               </button>
+              <span id="#{unique_id}-copied" style="display: none;">#{copied_content}</span>
             </div>
           HTML
 
