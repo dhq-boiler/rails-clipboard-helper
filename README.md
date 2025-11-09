@@ -213,6 +213,66 @@ This gem uses the modern Clipboard API, which is supported by:
 
 Requires HTTPS or localhost for operation.
 
+## Troubleshooting
+
+### Helper method `clipboard_copy` is not found
+
+If you get an error like `undefined method 'clipboard_copy'`, try the following:
+
+1. **Restart your Rails server** after installing the gem:
+   ```bash
+   bundle install
+   rails restart  # or ctrl+c and restart your server
+   ```
+
+2. **Verify the gem is installed:**
+   ```bash
+   bundle list | grep rails-clipboard-helper
+   ```
+
+3. **Check if the gem is required:**
+   The helper should be automatically included in your views via Rails Engine/Railtie.
+   If not, you can manually include it in `app/controllers/application_controller.rb`:
+   ```ruby
+   class ApplicationController < ActionController::Base
+     helper Rails::Clipboard::Helper::ViewHelpers
+   end
+   ```
+
+4. **Check your Rails version:**
+   This gem requires Rails 6.0 or higher.
+
+### JavaScript not working / Copy button doesn't respond
+
+1. **Check if JavaScript is loaded:**
+   Open browser developer console and look for any JavaScript errors.
+
+2. **For Importmap (Rails 7+):**
+   Make sure `config/importmap.rb` includes:
+   ```ruby
+   pin "rails_clipboard_helper"
+   ```
+   
+   And run:
+   ```bash
+   bin/importmap pin rails_clipboard_helper
+   ```
+
+3. **For Sprockets:**
+   Make sure `app/assets/javascripts/application.js` includes:
+   ```javascript
+   //= require rails_clipboard_helper
+   ```
+
+4. **Manual JavaScript inclusion:**
+   If asset pipeline is not working, add this to your layout:
+   ```erb
+   <%= clipboard_javascript_tag %>
+   ```
+
+5. **HTTPS requirement:**
+   The Clipboard API requires HTTPS (or localhost for development).
+
 ## Development
 
 After checking out the repo:
