@@ -2,7 +2,12 @@
 
 require_relative "helper/version"
 require_relative "helper/view_helpers"
-require_relative "helper/engine" if defined?(Rails::Engine)
+
+if defined?(Rails::Engine)
+  require_relative "helper/engine"
+elsif defined?(Rails::Railtie)
+  require_relative "helper/railtie"
+end
 
 module Rails
   module Clipboard
