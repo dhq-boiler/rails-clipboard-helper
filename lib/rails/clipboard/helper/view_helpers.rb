@@ -68,87 +68,43 @@ module Rails
             copied_content = ERB::Util.html_escape(copied_text)
           end
 
+          # Inline JavaScript for clipboard functionality
+          onclick_js = <<~JS.strip.gsub("\n", ' ')
+            (function(btn) {
+              const target = document.getElementById('#{unique_id}');
+              const text = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' ? target.value : target.textContent;
+              navigator.clipboard.writeText(text).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = '#{copied_content.gsub("'", "\\\\'")}';
+                btn.style.color = '#28a745';
+                setTimeout(() => {
+                  btn.innerHTML = original;
+                  btn.style.color = '#0066cc';
+                }, 2000);
+              }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard');
+              });
+            })(this);
+          JS
+
           html = <<~HTML
             <div class="#{container_class}" style="display: flex; align-items: center; gap: 10px;">
+              #{show_content ? %Q(<span class="#{content_class}" id="#{unique_id}">#{ERB::Util.html_escape(content)}</span>) : %Q(<input type="hidden" id="#{unique_id}" value="#{ERB::Util.html_escape(content)}">)}
               <button 
                 type="button" 
                 class="#{button_class}" 
-                data-clipboard-target="#{unique_id}"
-                data-original-html="#{ERB::Util.html_escape(button_content)}"
-                data-copied-html="#{ERB::Util.html_escape(copied_content)}"
-                style="padding: 5px 10px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: #f8f9fa; display: inline-flex; align-items: center; gap: 4px;"
+                style="padding: 0; cursor: pointer; border: none; background: none; color: #0066cc; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; font: inherit;"
+                onmouseover="this.style.textDecoration='underline';"
+                onmouseout="this.style.textDecoration='none';"
+                onclick="#{onclick_js}"
               >
                 #{button_content}
               </button>
-              #{show_content ? %Q(<span class="#{content_class}" id="#{unique_id}">#{ERB::Util.html_escape(content)}</span>) : %Q(<input type="hidden" id="#{unique_id}" value="#{ERB::Util.html_escape(content)}">)}
             </div>
           HTML
 
           html.html_safe
-        end
-
-        # Helper method that includes JavaScript (optional - JavaScript is auto-loaded)
-        # This method is kept for backward compatibility
-        #
-        # Note: JavaScript is automatically loaded via asset pipeline.
-        # You only need to call this method if you're not using the asset pipeline.
-        def clipboard_javascript_tag
-          javascript_tag do
-            <<~JAVASCRIPT
-              (function() {
-                function initClipboardButtons() {
-                  document.querySelectorAll('[data-clipboard-target]').forEach(function(button) {
-                    if (button.dataset.clipboardInitialized) return;
-                    button.dataset.clipboardInitialized = 'true';
-
-                    button.addEventListener('click', function() {
-                      const targetId = this.getAttribute('data-clipboard-target');
-                      const targetElement = document.getElementById(targetId);
-                      
-                      // Support both old (text) and new (HTML) data attributes
-                      const originalContent = this.getAttribute('data-original-html') || this.getAttribute('data-original-text');
-                      const copiedContent = this.getAttribute('data-copied-html') || this.getAttribute('data-copied-text');
-                      
-                      let textToCopy;
-                      if (targetElement.tagName === 'INPUT' || targetElement.tagName === 'TEXTAREA') {
-                        textToCopy = targetElement.value;
-                      } else {
-                        textToCopy = targetElement.textContent;
-                      }
-                      
-                      navigator.clipboard.writeText(textToCopy).then(() => {
-                        // Use innerHTML for HTML content (SVG icons), textContent for plain text
-                        if (this.getAttribute('data-original-html')) {
-                          this.innerHTML = copiedContent;
-                        } else {
-                          this.textContent = copiedContent;
-                        }
-                        this.style.background = '#d4edda';
-                        
-                        setTimeout(() => {
-                          if (this.getAttribute('data-original-html')) {
-                            this.innerHTML = originalContent;
-                          } else {
-                            this.textContent = originalContent;
-                          }
-                          this.style.background = '#f8f9fa';
-                        }, 2000);
-                      }).catch(err => {
-                        console.error('Failed to copy to clipboard:', err);
-                        alert('Failed to copy');
-                      });
-                    });
-                  });
-                }
-                
-                if (document.readyState === 'loading') {
-                  document.addEventListener('DOMContentLoaded', initClipboardButtons);
-                } else {
-                  initClipboardButtons();
-                }
-              })();
-            JAVASCRIPT
-          end
         end
       end
     end

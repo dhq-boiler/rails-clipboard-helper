@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2025-11-09
+
+### Changed
+- Changed button default style to link-like appearance (no border, no background, blue text color)
+- Added hover effect with underline on buttons
+- Changed success feedback from background color to text color change (green)
+- **BREAKING**: Replaced external JavaScript with inline JavaScript - no asset pipeline setup needed
+- Removed `clipboard_javascript_tag` helper method (no longer needed)
+- Removed Engine and Railtie (simplified gem structure)
+- Removed dependency on `railties` (only requires `actionview` now)
+- Updated documentation to remove JavaScript setup instructions
+
 ## [0.1.1] - 2025-11-09
 
 ### Fixed
@@ -37,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive RSpec tests
 - Documentation
 
+[0.1.2]: https://github.com/dhq_boiler/rails-clipboard-helper/releases/tag/v0.1.2
 [0.1.1]: https://github.com/dhq_boiler/rails-clipboard-helper/releases/tag/v0.1.1
 [0.1.0]: https://github.com/dhq_boiler/rails-clipboard-helper/releases/tag/v0.1.0
 

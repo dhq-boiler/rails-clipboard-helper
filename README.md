@@ -5,9 +5,11 @@ A Rails view helper gem that displays a copy button alongside text content, allo
 ## Features
 
 - Easy text copying to clipboard
+- **No JavaScript setup required** - works out of the box with inline JavaScript
+- Link-style button design (no borders, no background)
 - Customizable styles
 - Uses modern Clipboard API
-- Visual feedback on successful copy
+- Visual feedback on successful copy (icon and color change)
 
 ## Installation
 
@@ -25,43 +27,6 @@ bundle install
 
 ## Usage
 
-### JavaScript Setup
-
-The gem uses Rails Engine to automatically make JavaScript available. You need to include it in your asset pipeline:
-
-**For Sprockets (Asset Pipeline):**
-
-Add to `app/assets/javascripts/application.js`:
-```javascript
-//= require rails_clipboard_helper
-```
-
-**For Importmap (Rails 7+):**
-
-Add to `config/importmap.rb`:
-```ruby
-pin "rails_clipboard_helper"
-```
-
-Then the JavaScript will be automatically loaded.
-
-**For esbuild/webpack:**
-
-The JavaScript file is located at `app/assets/javascripts/rails_clipboard_helper.js` in the gem.
-You may need to configure your build tool to include it.
-
-**Manual setup (alternative):**
-
-If you prefer not to use the asset pipeline, add to your layout:
-```erb
-<%= clipboard_javascript_tag %>
-```
-
-**Features:**
-- Automatic initialization on page load
-- Turbo/Hotwire support (turbo:load, turbo:render)
-- Turbolinks support (turbolinks:load)
-- Prevents duplicate event listeners
 
 ### Basic Usage
 
@@ -71,7 +36,7 @@ Use the `clipboard_copy` helper in your views:
 <%= clipboard_copy("Text you want to copy") %>
 ```
 
-By default, this displays an SVG copy icon. When clicked, it changes to a checkmark icon.
+By default, this displays an SVG copy icon styled as a link (no border, no background). When clicked, it changes to a checkmark icon and the color briefly changes to green.
 
 ### Usage with Options
 
@@ -135,36 +100,48 @@ To display only the button and hide the content to be copied:
 
 ### Custom Styles
 
-You can customize the styles with your own CSS:
+The button is styled as a link by default (no border, no background, blue color with underline on hover). You can customize the styles with your own CSS:
 
 ```css
+/* Custom container style */
 .clipboard-container {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px;
-  background: #f5f5f5;
-  border-radius: 8px;
 }
 
+/* Custom button style - override the link-like default */
 .clipboard-button {
-  padding: 8px 16px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  color: #0066cc;
+  text-decoration: none;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: color 0.2s;
 }
 
 .clipboard-button:hover {
-  background: #0056b3;
+  color: #004499;
+  text-decoration: underline;
 }
 
+/* Or create a button-like style */
+.my-button {
+  padding: 8px 16px;
+  background: #007bff;
+  color: white !important;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+}
+
+.my-button:hover {
+  background: #0056b3;
+  text-decoration: none !important;
+}
+
+/* Custom content style */
 .clipboard-content {
   font-family: monospace;
   padding: 5px 10px;
-  background: white;
+  background: #f8f9fa;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -231,7 +208,7 @@ If you get an error like `undefined method 'clipboard_copy'`, try the following:
    ```
 
 3. **Check if the gem is required:**
-   The helper should be automatically included in your views via Rails Engine/Railtie.
+   The helper should be automatically included in your views.
    If not, you can manually include it in `app/controllers/application_controller.rb`:
    ```ruby
    class ApplicationController < ActionController::Base
@@ -240,38 +217,15 @@ If you get an error like `undefined method 'clipboard_copy'`, try the following:
    ```
 
 4. **Check your Rails version:**
-   This gem requires Rails 6.0 or higher.
+   This gem requires ActionView 6.0 or higher.
 
-### JavaScript not working / Copy button doesn't respond
+### Copy button doesn't work
 
-1. **Check if JavaScript is loaded:**
-   Open browser developer console and look for any JavaScript errors.
-
-2. **For Importmap (Rails 7+):**
-   Make sure `config/importmap.rb` includes:
-   ```ruby
-   pin "rails_clipboard_helper"
-   ```
-   
-   And run:
-   ```bash
-   bin/importmap pin rails_clipboard_helper
-   ```
-
-3. **For Sprockets:**
-   Make sure `app/assets/javascripts/application.js` includes:
-   ```javascript
-   //= require rails_clipboard_helper
-   ```
-
-4. **Manual JavaScript inclusion:**
-   If asset pipeline is not working, add this to your layout:
-   ```erb
-   <%= clipboard_javascript_tag %>
-   ```
-
-5. **HTTPS requirement:**
+1. **HTTPS requirement:**
    The Clipboard API requires HTTPS (or localhost for development).
+
+2. **Check browser console:**
+   Open browser developer console (F12) and look for any JavaScript errors.
 
 ## Development
 

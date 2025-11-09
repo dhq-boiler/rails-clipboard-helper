@@ -3,7 +3,7 @@
 module Rails
   module Clipboard
     module Helper
-      VERSION = "0.1.1"
+      VERSION = "0.1.2"
     end
   end
 end
