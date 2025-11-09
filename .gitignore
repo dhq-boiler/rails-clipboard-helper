@@ -1,0 +1,43 @@
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+
+# rspec failure tracking
+.rspec_status
+
+# Built gems
+*.gem
+
+# Bundler lock file (gems typically don't commit this)
+Gemfile.lock
+
+# macOS files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# RubyMine
+.rakeTasks
+
+# Environment variables
+.env
+.env.local
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+
