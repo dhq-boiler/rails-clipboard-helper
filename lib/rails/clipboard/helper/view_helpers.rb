@@ -88,7 +88,7 @@ module Rails
           JS
 
           html = <<~HTML
-            <div class="#{container_class}" style="display: flex; align-items: center; gap: 10px;">
+            <div class="#{container_class}">
               #{show_content ? %Q(<span class="#{content_class}" id="#{unique_id}">#{ERB::Util.html_escape(content)}</span>) : %Q(<input type="hidden" id="#{unique_id}" value="#{ERB::Util.html_escape(content)}">)}
               <button 
                 type="button" 
